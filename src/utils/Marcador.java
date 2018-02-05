@@ -189,7 +189,7 @@ public class Marcador extends JFrame {
 			
 		});
 		
-		JButton btnSalida = new JButton("Salida");
+		JButton btnSalida = new JButton("Salida");	
 		btnSalida.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				Calendar calendar = Calendar.getInstance();
