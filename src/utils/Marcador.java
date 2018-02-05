@@ -22,6 +22,7 @@ import javax.swing.SwingConstants;
 import javax.swing.Timer;
 import javax.swing.border.EmptyBorder;
 
+import controlSistencia.complementos.Utiles.Constantes;
 import controlSistencia.complementos.Utiles.ExcelExporter;
 import controlSistencia.complementos.Utiles.Marcaje;
 import controlSistencia.complementos.Utiles.TipoMarcaje.Tipo;
@@ -120,7 +121,7 @@ public class Marcador extends JFrame {
 			public void actionPerformed(ActionEvent arg0) {
 			ExcelExporter ex = new ExcelExporter();
 			try {
-				ex.exportTable(table, "D:\\workbook.xls");
+				ex.exportTable(table, Constantes.EXCEL_FILE);
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

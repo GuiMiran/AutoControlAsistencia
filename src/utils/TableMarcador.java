@@ -5,6 +5,8 @@ import java.awt.Dimension;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Writer;
+import java.lang.ProcessBuilder.Redirect.Type;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -13,8 +15,12 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
+import org.apache.poi.ss.formula.functions.Index;
+
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
+import com.google.gson.stream.JsonReader;
 
 import controlSistencia.complementos.Utiles.Marcaje;
 
@@ -26,6 +32,8 @@ import controlSistencia.complementos.Utiles.Marcaje;
 		 */
 		private static final long serialVersionUID = 1L;
 		private JTable table;
+		
+
 	    public JTable getTable() {
 			return table;
 		}
@@ -33,8 +41,21 @@ import controlSistencia.complementos.Utiles.Marcaje;
 			this.table = table;
 		}
 		public TableMarcador(){
-
-	        String [] header={"Tipo", "fecha", "hora", "Segundos"};
+			String [] header={"Tipo", "fecha", "hora", "Segundos"};
+			
+			Gson gson = new Gson();
+			java.lang.reflect.Type listType = new TypeToken<ArrayList<Marcaje>>() {}.getType();
+			String msj="[{\"dia\":5,\"anyo\":2018,\"mes\":\"febrero\",\"numMes\":1,\"tipo\":\"COMIDA\",\"hora\":21,\"minutos\":2,\"segundos\":43}]";
+			List<Marcaje> liData = gson.fromJson(msj, listType); // contains the whole reviews list
+			//data.toScreen(); 
+			String [][] newData = new String[30][4];
+	        for (Marcaje marcajeElement : liData) {
+	        	newData[0][0]="ENTRADA";
+	        	newData[liData.indexOf(marcajeElement)][0]=marcajeElement.getTipo().toString();
+	        	newData[liData.indexOf(marcajeElement)][1]=marcajeElement.getMes().toString();
+	        	newData[liData.indexOf(marcajeElement)][2]=""+marcajeElement.getHora();
+	        	newData[liData.indexOf(marcajeElement)][3]=""+marcajeElement.getMinutos();
+			}
 	        String [][] data={{"","","",""}};
 	        		/*{"ENTRADA"," "},
 	        				  {"COMIDA"," "},
@@ -43,7 +64,7 @@ import controlSistencia.complementos.Utiles.Marcaje;
 	        				  };
 */
 
-	        DefaultTableModel model = new DefaultTableModel(data,header);
+	        DefaultTableModel model = new DefaultTableModel(newData,header);
 
 	        table = new JTable(model);
 
@@ -77,7 +98,7 @@ import controlSistencia.complementos.Utiles.Marcaje;
 		}
 	    
 	    private void escribirArchivo(List<Marcaje> liHoras){
-	    	try (Writer writer = new FileWriter("C:\\Output.json")) {
+	    	try (Writer writer = new FileWriter("D:\\Output.json")) {
 			    Gson gson = new GsonBuilder().create();
 			    gson.toJson(liHoras, writer);
 			} catch (IOException e) {
