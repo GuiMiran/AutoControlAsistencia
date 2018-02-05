@@ -5,6 +5,7 @@ import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -66,7 +67,13 @@ public class Marcador extends JFrame {
 		setContentPane(contentPane);	
 		textHora = new JTextField();
 		textHora.setColumns(10);	
-		table = new TableMarcador();
+		try {
+			table = new TableMarcador();
+			liHoras.addAll(table.getLiData());
+		} catch (FileNotFoundException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 		JButton btnEntrada = new JButton("Entrada");
 		btnEntrada.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {

@@ -2,6 +2,9 @@ package utils;
 
 
 import java.awt.Dimension;
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Writer;
@@ -32,25 +35,33 @@ import controlSistencia.complementos.Utiles.Marcaje;
 		 */
 		private static final long serialVersionUID = 1L;
 		private JTable table;
-		
+		private List<Marcaje> liData;
 
-	    public JTable getTable() {
+	    public List<Marcaje> getLiData() {
+			return liData;
+		}
+		public void setLiData(List<Marcaje> liData) {
+			this.liData = liData;
+		}
+		public JTable getTable() {
 			return table;
 		}
 		public void setTable(JTable table) {
 			this.table = table;
 		}
-		public TableMarcador(){
+		public TableMarcador() throws FileNotFoundException{
 			String [] header={"Tipo", "fecha", "hora", "Segundos"};
 			
 			Gson gson = new Gson();
 			java.lang.reflect.Type listType = new TypeToken<ArrayList<Marcaje>>() {}.getType();
 			String msj="[{\"dia\":5,\"anyo\":2018,\"mes\":\"febrero\",\"numMes\":1,\"tipo\":\"COMIDA\",\"hora\":21,\"minutos\":2,\"segundos\":43}]";
-			List<Marcaje> liData = gson.fromJson(msj, listType); // contains the whole reviews list
-			//data.toScreen(); 
+			BufferedReader br = new BufferedReader(
+				     new FileReader("Output.json"));
+
+			liData = gson.fromJson(br, listType); // contains the whole reviews list
+			System.out.println(liData.size()); 
 			String [][] newData = new String[30][4];
 	        for (Marcaje marcajeElement : liData) {
-	        	newData[0][0]="ENTRADA";
 	        	newData[liData.indexOf(marcajeElement)][0]=marcajeElement.getTipo().toString();
 	        	newData[liData.indexOf(marcajeElement)][1]=marcajeElement.getMes().toString();
 	        	newData[liData.indexOf(marcajeElement)][2]=""+marcajeElement.getHora();
