@@ -1,23 +1,30 @@
 package utils;
 
 
-	import java.awt.Component;
 import java.awt.Dimension;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.Writer;
 import java.util.List;
+import java.util.logging.Logger;
 
-import javax.swing.JButton;
-import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableModel;
+
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import controlSistencia.complementos.Utiles.Marcaje;
 
 	public class TableMarcador extends JPanel{
 
 	    
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
 		private JTable table;
 	    public JTable getTable() {
 			return table;
@@ -51,7 +58,8 @@ import controlSistencia.complementos.Utiles.Marcaje;
 
 	    }
 	    public void mostrar(List<Marcaje> liHoras) {
-			Object matris[][]=new Object[liHoras.size()][4];
+	    	escribirArchivo(liHoras);
+	    	Object matris[][]=new Object[liHoras.size()][4];
 			for (int i = 0; i < liHoras.size(); i++) {
 				matris[i][0]=liHoras.get(i).getTipo();
 				matris[i][1]=liHoras.get(i).getDia()+"/"+liHoras.get(i).getMes()+"/"+liHoras.get(i).getAnyo();
@@ -68,22 +76,15 @@ import controlSistencia.complementos.Utiles.Marcaje;
 			
 		}
 	    
-	    private void setModel(DefaultTableModel defaultTableModel) {
-			// TODO Auto-generated method stub
-			
-		}
-//		public static void main(String [] a) {
-//
-//	        JFrame jf=new JFrame();
-//	        TableMarcador tab= new TableMarcador();
-//	        jf.setTitle("Table");
-//	        jf.setSize(500, 500);
-//	        jf.setVisible(true);
-//	        jf.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-//	        jf.add(tab);
-//	        JButton btnMarcar = new JButton("Marcar");
-//
-//	    }
+	    private void escribirArchivo(List<Marcaje> liHoras){
+	    	try (Writer writer = new FileWriter("C:\\Output.json")) {
+			    Gson gson = new GsonBuilder().create();
+			    gson.toJson(liHoras, writer);
+			} catch (IOException e) {
+			Logger.getLogger(e.getMessage());
+				e.printStackTrace();
+			}
+	    }
 		
 
 	}
